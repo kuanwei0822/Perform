@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>API串接</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<!-- 外部資源連結 -->
+		
+		<!-- jQuery -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<!-- CSS reset -->
+		<link rel="stylesheet" href="https://meyerweb.com/eric/tools/css/reset/reset200802.css">
+		<!-- 字型連結	font-family: 'Noto Sans TC', sans-serif; -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300&display=swap">
+		
+		
+		<style type="text/css">	
+			.dataInput{
+				width:100%;
+				min-width:600px;
+				padding:150px 0;
+				background:linear-gradient(180deg,#FFBB77,#FFFFAA);
+			}
+			.dataInput .wrap{
+				width:600px;
+				margin:auto;
+				padding: 20px 50px;
+				border-radius: 10px;
+				background:linear-gradient(180deg,#FFFFAA,#ffffff);
+			}
+			.dataInput .wrap .topic{
+			}
+			.dataInput .wrap .topic h3{
+				height:50px;
+				margin-bottom:20px;
+				line-height:50px;
+				text-align:center;
+				vertical-align:middle;
+				font-size:40px;
+				font-family: 'Noto Sans TC', sans-serif;
+				position:relative;
+				z-index:1;
+			}
+			.dataInput .wrap .topic h3::before{
+				content:"";
+				display:block;
+				width:25px;
+				height:25px;
+				border: 7px solid #FF8000;
+				position:absolute;
+				top:-5px;
+				left:-30px;
+				z-index:-1;
+				transform: rotate(30deg);
+			}
+			.dataInput .wrap .topic h3::after{
+				content:"";
+				display:block;
+				height:3px;
+				position:absolute;
+				bottom:-10px;
+				left:-10px;
+				right:-10px;
+				z-index:-1;
+				background:#FF8000;
+			}
+			.dataInput .wrap .topic p{
+				height:50px;
+				padding-left:20px;
+				margin-bottom:20px;
+				line-height:25px;
+				font-size:17px;
+				vertical-align:middle;
+				font-family: 'Noto Sans TC', sans-serif;
+				position:relative;
+				z-index:1;
+			}
+			
+			.dataInput .wrap .selection{
+				border-bottom:3px solid #000000;
+				padding-bottom:20px;
+			}
+			.dataInput .wrap .selection .selection_head{
+			}
+			.dataInput .wrap .selection .selection_head h3{
+				height:50px;
+				line-height:50px;
+				font-size:25px;
+				font-family: 'Noto Sans TC', sans-serif;
+			}
+			.dataInput .wrap .selection .selection_input{
+				display:flex;
+			}
+			
+			.dataInput .wrap .selection .selection_input select{
+				display:block;
+				height:30px;
+				font-family: 'Noto Sans TC', sans-serif;
+			}
+			
+			.dataInput .wrap .selection .selection_input .nation{
+				width:300px;
+			}
+			.dataInput .wrap .selection .selection_input .nation select{
+				width:280px;
+			}
+			.dataInput .wrap .selection .selection_input .bytime{
+				width:120px;
+			}
+			.dataInput .wrap .selection .selection_input .bytime select{
+				width:100px;
+			}
+			.dataInput .wrap .selection .selection_input .sendout{
+				width:180px;
+				display:flex;
+			}
+			.dataInput .wrap .selection .selection_input .sendout button{
+				display:block;
+				width:50px;
+				height:30px;
+				margin-left:10px;
+				font-family: 'Noto Sans TC', sans-serif;
+			}
+			
+			.dataInput .wrap .dataOutput{
+				padding:30px 0;
+			}
+			.dataInput .wrap .dataTable p{
+				text-align:center;
+				padding:10px 0;
+				line-height:20px;
+				font-size:17px;
+				font-family: 'Noto Sans TC', sans-serif;
+			}
+			.dataInput .wrap .dataTable table{
+				margin:50px auto;
+				padding:1px;
+				border-collapse:separate;
+				border-spacing:3px;
+				border:2px solid #999999;
+				border-radius:5px;
+				background:#ffffff;
+			}
+			.dataInput .wrap .dataTable table tr:nth-child(odd){
+				background:#ffffff;
+			}
+			.dataInput .wrap .dataTable table tr:nth-child(even){
+				background:#FFFFB9;
+			}
+			.dataInput .wrap .dataTable table tr:hover{
+				background:#FF8800;
+			}
+			
+			.dataInput .wrap .dataTable table tr td:first-child{
+				width:80px;
+			}
+			.dataInput .wrap .dataTable table td{
+				width:200px;
+				height:30px;
+				padding:10px 0;
+				border:1px solid #ADADAD;
+				line-height:30px;
+				font-size:25px;
+				text-align:center;
+				font-family: 'Noto Sans TC', sans-serif;
+			}
+			
+		</style>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				
+				// reset table表格
+				function reset(){
+					$(".dataTable").html("");
+				}
+				
+				// 根據input處理、過濾收到的資料
+				function filter(requestData){
+					
+					var nation_num = $("#nation").val();					
+					// 宣告 nation_string 選擇的幣別(string)
+					var nation_string = $("#nation option").eq(nation_num).html();
+					// 宣告 nation_value 匯率資料
+					var nation_value = [];
+					// 宣告 time_value 月份or年份資料
+					var time_value=[];
+					
+					// 宣告 time_type 月別or年度
+					if( $("#bytime").val() == 1 ){
+							var time_type = "月別";
+						}else if( $("#bytime").val() == 2 ){
+							var time_type = "年度";
+						}
+					
+					for(let i=0;i<requestData.length;i++){
+						// 取得匯率資料
+						nation_value.push(requestData[i][nation_string]);
+						
+						// 取得月份/年份
+						time_value.push(requestData[i][time_type]);
+					}
+					console.log(nation_value);	
+					console.log(time_value);	
+					addTable(time_value,nation_value,time_type,nation_string);
+				}
+				
+				// 建立表格( 月別/年分Data, 匯率Data , 月別/年分string ,幣別string )
+				function addTable(time_value,nation_value,time_type,nation_string){
+					var tab = $("<table></table>");
+					// 宣告 cul_num 行數
+					var cul_num = 3;
+					// 宣告 cul,row 作為表格內<tr>、<td>物件
+					var row;
+					var cul; 
+					
+					// 建立表格標頭:第一列
+					row = $("<tr></td>");
+					for(let i=0;i<cul_num;i++){
+						if(i == 0){
+							cul = $("<td></td>");
+						}else if(i==1){
+							cul = $("<td>"+ time_type +"</td>");
+						}else if(i==2){
+							cul = $("<td>"+ nation_string + "匯率" +"</td>");
+						}
+						row.append(cul);
+					}
+					
+					tab.append(row);
+					
+					
+					// 建立表格:第二列之後
+					for(let i=0;i<time_value.length;i++){
+						row = $("<tr></td>");
+						
+						// 建立表格:行(2行)
+						for(let j=0;j<cul_num;j++){
+						
+							if(j==0){
+								cul = $("<td>"+ (i+1) + "</td>");
+							}else if(j==1){
+								cul = $("<td>"+ time_value[i] +"</td>");	
+							}else if(j==2){
+								cul = ($("<td>"+ nation_value[i] +"</td>"));
+							}
+							row.append(cul);	// 填滿一列
+						}
+						
+						tab.append(row);	// 將一列併入table
+					}
+					
+					// 將 table 併入 dataTable的div內
+					$(".dataTable").append(tab);	
+					
+					
+				}
+				
+				
+				// 送出並請求資料 
+				$("#btn_sendout").click(function(){
+					
+					var data_url;
+					var requestData;
+					
+					// 載入之前reset table區塊
+					reset();
+					
+					// 防呆:避免沒有選擇任何選項，彈出視窗
+					if( $("#nation").val()==0 ){
+						alert("請選擇匯率國家");
+						return;
+					}else if( $("#bytime").val()==0 ){
+						alert("請選擇時間");
+						return;
+					}
+					
+					console.log("通過防呆");
+					
+					// 判斷input資料 -> 決定要請求的網址:(年/月)
+					if( $("#bytime").val()==1 ){
+						data_url = "https://apiservice.mol.gov.tw/OdService/download/A17030000J-000049-Ic4";
+					}else if( $("#bytime").val()==2 ){
+						data_url = "https://apiservice.mol.gov.tw/OdService/download/A17000000J-030185-ofw";
+					}
+					
+					// 網址來源:
+					// 注意:網址必須要符合CORS:* 跨域規範下可存取才有辦法取得 
+					// 來源-政府資料開放平台: https://data.gov.tw/dataset/31897 
+					// 國際主要國家貨幣每月匯率: https://apiservice.mol.gov.tw/OdService/download/A17030000J-000049-Ic4
+					// 國際主要國家貨幣每年匯率: https://apiservice.mol.gov.tw/OdService/download/A17000000J-030185-ofw
+					
+					// 建立請求物件
+					var request = new XMLHttpRequest();
+					// 設定請求方式:get，根據input使用:data_url
+					request.open("GET",data_url,true);
+					// 送出請求
+					request.send();
+					
+					// 接收資料並轉換
+					request.onreadystatechange = function(){
+						if( request.readyState==4){
+							if(request.status == 200 ){
+								console.log("v讀取成功");
+								// 轉換得到的JSON資料
+								requestData = JSON.parse(request.response);
+								console.log(requestData);
+								filter(requestData);
+								
+							}
+						}
+					}
+				})
+				
+				// Reset 按鈕
+				$("#btn_reset").click(function(){
+					reset();
+					
+					// 加入尚無載入資料字樣
+					var default_obj =$("<p></p>");
+					default_obj.html("尚無載入資料");
+					$(".dataTable").append(default_obj);
+				})
+				
+			})
+		</script>
+	</head>
+	<body>
+		<!--
+		<div id="root">
+			<button id="btn">載入</button>
+		<div>
+		-->
+		<div class="dataInput">
+			<div class="wrap">
+				<div class="topic">
+					<h3>取得政府資料開放平台的匯率資料</h3>
+					<p>利用ajax對政府開放資料平台提出請求，並取得json公開資料。<br>
+					資料出處:&nbsp<a href="https://data.gov.tw/ " target="_blank">政府資料開放平台</a></p>
+				</div>
+				<div class="selection">
+					<div class="selection_head">
+						<h3>選擇匯率幣別和時間並送出</h3>
+					</div>
+					<div class="selection_input">
+						<div class="nation">
+							<select name="nation" id="nation">
+								<option value="0">--選擇匯率幣別--</option>
+								<option value="1">新台幣</option>
+								<option value="2">人民幣</option>
+								<option value="3">日圓</option>
+								<option value="4">韓元</option>
+								<option value="5">新加坡元</option>
+								<option value="6">歐元</option>
+								<option value="7">英鎊</option>
+								<option value="8">澳幣</option>
+							</select>
+						</div>
+						<div class="bytime">
+							<select name="bytime" id="bytime">
+								<option value="0">--選擇時間--</option>
+								<option value="1">每月</option>
+								<option value="2">每年</option>
+							</select>
+						</div>
+						<div class="sendout">
+							<button id="btn_sendout">送出</button>
+							<button id="btn_reset">Reset</button>
+						</div>
+					</div>
+				</div>
+				<div class="dataTable">
+					<p>尚無載入資料</p>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
