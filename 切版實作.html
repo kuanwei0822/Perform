@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>切版實作</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<!-- 外部連結 -->
+		
+		<!-- CSS reset -->
+		<link rel="stylesheet" href="reset.css">
+		<!-- CSS 主要樣式 -->	
+		<link rel="stylesheet" href="切版實作.css">
+		<!-- CSS 字型: 	font-family: 'Noto Sans TC', sans-serif; -->	
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300&display=swap">
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				
+			// 小漢堡點擊功能
+				$(".head_btn").click(function(){
+					$(".head_item").toggleClass("show");
+					$(".btn_img div").toggleClass("cross");
+				});
+				
+			// banner 圖片變換功能(最多九張)
+				
+				var img_number = 4;			// 圖片總數
+				var img_first_order = 1;	// 第一張圖片(1開始算)		
+				var banner_timer;			// setInterval計時器
+				for(let i=0;i<img_number;i++){	// 根據圖片總數建立point圓圈
+					$(".img_point").append($("<div></div>"));
+				}
+				
+				// function(當下選則的圖片order): 立即變換圖片
+				function imgChange(order){
+				
+					var img_src = $(".banner_img img").attr("src");
+					img_src = img_src.substring(0,img_src.length-5);
+					$(".banner_img img").attr("src",img_src + order + ".png");
+				}
+				
+				// function(當下選則的point order): 立即變換point
+				function pointChange(order){
+					
+					$(".img_point div").removeClass("active");
+					$(".img_point div").eq(order-1).addClass("active");
+				}
+
+				
+				// 點擊時觸發圖片變換 + 圖片循環
+				function bannerImg(order){
+				
+					imgChange(order);
+					pointChange(order);
+					
+					clearInterval(banner_timer);
+					banner_timer = setInterval(function(){
+						if( order == img_number){
+							order = 1;
+						}else{
+							order++;
+						}
+						imgChange(order);
+						pointChange(order);
+						
+					},2500);
+				}
+				
+				// 建立點擊時觸發事件
+				$(".img_point div").click(function(){
+					var order = $(this).index() + 1;
+					bannerImg(order);
+				});
+				
+			// 網頁打開自動點擊first_order圖片
+				bannerImg(img_first_order);
+		
+			// location 點擊農場顯示detail功能
+		
+				// 建立點擊事件
+				var form_number = $(".location_item .item").length;
+				for(let i=0;i<form_number;i++){
+					
+					// location 的item 點擊觸發事件
+					$(".location_item .item").eq(i).click(function(){
+						$(".location_detail .detail").eq($(this).index()).toggleClass("show");
+					});
+					
+					// location 的 detail 點擊觸發事件(因為 detail 不屬於 item 的子元素)
+					$(".location_detail .detail").eq(i).click(function(){
+						$(".location_detail .detail").eq($(this).index()).toggleClass("show");
+						console.log("ccc");
+					});
+					
+				}
+			
+			// production 區塊 (可自由加入產品)
+				
+				var card_num = $(".product_card ul li").length;	// 產品卡數量
+				var card_order = 1 ; // 當前顯示的產品序
+				
+				// 產品卡更換顯示(要顯示的產品序)
+				function productShow(order){
+					var margin_move = (order-1)*(-360) + "px";
+					$(".product_card ul").css("margin-left",margin_move);
+					console.log(margin_move);
+				};
+				
+				// product_point 更換
+				function pointShow(order){
+					$(".point_wrap div").removeClass("show");
+					$(".point_wrap div").eq((order-1)).addClass("show");
+				};
+				
+				
+				// 建立 product_point + show 屬性
+				for(let i=0;i<card_num;i++){
+					$(".point_wrap").append($("<div></div>"));
+				}
+				$(".point_wrap div").first().addClass("show");
+				
+				// product_btn 觸發事件
+				$(".product_btn div").click(function(){
+					if( $(this).index() == 0 && card_order == 1){
+					
+					}else if( $(this).index() == 0 && card_order != 1){
+						card_order--;
+					}else if( $(this).index() == 1 && card_order == card_num ){
+						
+					}else if( $(this).index() == 1 && card_order != card_num ){
+						card_order++;
+					}
+					productShow(card_order);
+					pointShow(card_order);
+				});
+				
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="head">
+			<div class="wrap">
+				<div class="head_logo">
+					<img src="source/logo.jpg">
+					<p>Mini Choco</p>
+				</div>
+				<div class="head_item">
+					<ul>
+						<li><a href="#">首頁</a></li>
+						<li><a href="#">最新商品</a></li>
+						<li><a href="#">優惠情報</a></li>
+						<li><a href="#">聯絡我們</a></li>
+					</ul>
+				</div>
+				<div class="head_btn">
+					<div class="btn_img">
+						<div class="decoration_1"></div>
+						<div class="decoration_2"></div>
+						<div class="decoration_3"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="banner">
+			<div class="wrap">
+				<div class="banner_img">
+					<img src="source/banner_1.png">
+				</div>
+				<div class="img_point">
+				</div>
+			</div>
+		</div>
+		<div class="location">
+			<div class="wrap">
+				<div class="location_topic">
+					<h3>全台 Mini Choco 據點</h3>
+				</div>
+				<div class="location_item">
+					<div class="item">
+						<img src="source/other.png" >
+						<div class="comment">
+							<h4>台北敦化店</h4>
+						</div>
+					</div>
+					<div class="item">
+						<img src="source/other2.png" >
+						<div class="comment">
+							<h4>新竹巨城店</h4>
+						</div>
+					</div>
+					<div class="item">
+						<img src="source/other3.png" >
+						<div class="comment">
+							<h4>台南站前店</h4>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="location_detail">
+					<div class="detail">
+						<div class="detail_cont">
+							<img src="source/other.png" >
+							<h5>台北敦化店</h5>
+							<p>
+								地址: 台北市大安區敦化南路1段246號<br>
+								電話: (02) 333 6678<br>
+								營業時間: 上午 10:00 ~ 下午 21:30 
+							</p>
+						</div>
+					</div>
+					<div class="detail">
+						<div class="detail_cont">
+							<img src="source/other2.png" >
+							<h5>新竹巨城店</h5>
+							<p>
+								地址: 新竹市東區中央路229號300B1<br>
+								電話: (03) 333 6678<br>
+								營業時間: 上午 11:00 ~ 下午 20:00 
+							</p>
+						</div>
+					</div>
+					<div class="detail">
+						<div class="detail_cont">
+							<img src="source/other3.png" >
+							<h5>台南成功店</h5>
+							<p>
+								地址: 台南市東區前鋒路210號<br>
+								電話: (06) 333 6678<br>
+								營業時間: 上午 10:00 ~ 下午 21:00 
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="ideal">
+			<div class="wrap">
+				<h3>天然可可</h3>
+				<p>
+					&nbsp &nbsp &nbsp &nbsp 可可豆的產地主要是分布於赤道南、北緯約20度以內的區塊。因為氣候炎熱、多雨的環境，是最適合可可豆生長。可可豆在各地都有不同的風味，有的會帶點果香、有的則是有煙燻的風味。現今可可豆主要的產地有中南美洲、西非及東南亞等三地。Criollo 帶有獨特的細緻香氣，是最頂級的可可豆品種。 
+				</p>
+			</div>
+		</div>
+		<div class="product">
+			<div class="wrap">
+				<div class="product_topic">
+					<h3>精選巧克力</h3>
+				</div>
+				<div class="product_btn">
+					<div class="left_btn"></div>
+					<div class="right_btn"></div>
+				</div>
+				<div class="product_point">
+					<div class="point_wrap">
+						
+					</div>
+				</div>
+				<div class="product_card">
+					<ul>
+						<li>
+							<img src="source/product_1.png">
+							<h3>Criollo</h3>
+							<p>產量約是總可可豆產量的3%，主要是分布在南美洲的委內瑞拉。由於很怕蟲害，因此在栽種上相當不容易。但是不會過於酸、苦的風味，還帶有獨特的細緻香氣，是最頂級的可可豆品種。</p>
+							<div class="shop_btn"><i>NT.1800</i> &nbsp 加入購物車</div>
+						</li>
+						<li>
+							<img src="source/product_2.png">
+							<h3>Forastero</h3>
+							<p>是市面上最常見，生產也最大量的可可豆品種，佔總可可豆產量80%以上。主要分布在西非及東南亞。無論是在澀味、苦味及酸味上都相較濃厚，巧克力味也較淡，但因為產量多的關係，因此常使用於平價巧克力。</p>
+							<div class="shop_btn"><i>NT.1200</i> &nbsp 加入購物車</div>
+						</li>
+						<li>
+							<img src="source/product_3.png">
+							<h3>Trintario</h3>
+							<p>由Criollo、Forastero所混種的Trintario，原產地在加勒比海的千里達群島，口味比較濃郁厚實，帶一點果香味。由Criollo品種混搭Forastero的Trintario，在產量上也較容易栽培。</p>
+							<div class="shop_btn"><i>NT.1400</i> &nbsp 加入購物車</div>
+						</li>
+						<li>
+							<img src="source/product_4.png">
+							<h3>Dark chocolate</h3>
+							<p>含量介於70%到99%之間，或乳質含量少於12％的巧克力。其為價格最高的巧克力。組成：可可粉、可可脂、無糖。富含鐵，是缺鐵性貧血患者、素食者、補鐵的良好食物來源。</p>
+							<div class="shop_btn"><i>NT.900</i> &nbsp 加入購物車</div>
+						</li>
+						<li>
+							<img src="source/product_5.png">
+							<h3>義美巧克力泡芙</h3>
+							<p>最暢銷最長青的義美食品泡芙系列，香鬆脆脆的外殼與柔滑香濃的巧克力內餡，一顆一口方便食用，愈吃愈ㄙㄨㄚˋ嘴，適合各年齡層食用。</p>
+							<div class="shop_btn"><i>NT.80</i> &nbsp 加入購物車</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<div class="wrap">
+				<div class="item_group">
+					<div class="item">
+						<h3>聯絡我們</h3>
+						<ul>
+							<li>客服專線</li>
+							<li>訂購專線</li>
+							<li>E-mail</li>
+						</ul>
+					</div>
+					<div class="item">
+						<h3>認識我們</h3>
+						<ul>
+							<li>營業時間</li>
+							<li>安心製程</li>
+							<li>原料來源</li>
+							<li>衛生控管</li>
+						</ul>
+					</div>
+					<div class="item">
+						<h3>其他</h3>
+						<ul>
+							<li>友好小農</li>
+							<li>加盟事項</li>
+							<li>產品責任險</li>
+						</ul>
+					</div>
+
+				</div>
+				<div class="copyright">
+					Copyright &copy 2020 前端作品集。參考資料來源: <a href="https://zh.wikipedia.org/zh-tw/%E5%8F%AF%E5%8F%AF%E8%B1%86" target="_blank">wiki維基百科</a>、<a href="https://www.imeifoods.com.tw/" target="_blank">義美食品</a>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
