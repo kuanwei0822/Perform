@@ -799,7 +799,7 @@
 	
 	.ideal{
 		min-width:1000px;
-		background:linear-gradient(125deg,#000 25%,#F9F900 25%);
+		background:linear-gradient(125deg,#000 50%,#F9F900 50%);
 	}
 	.ideal .wrap{
 		width:1000px;
@@ -807,6 +807,7 @@
 		display:flex;
 		flex-direction:row;
 		flex-wrap:nowrap;
+		background: linear-gradient(125deg,#000 25%,#F9F900 25%);
 	}
 	.ideal .wrap h3{
 		width:0px;
