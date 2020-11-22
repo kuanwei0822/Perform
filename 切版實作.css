@@ -327,7 +327,7 @@
 	width:100%;
 	min-width:360px;
 	background:linear-gradient(180deg,#64A600,#8CEA00);
-	box-shadow:0px 0px 5px rgba(0, 0, 0, .7);
+	box-shadow:0px -2px 3px rgba(0, 0, 0, .3);
 }
 .ideal .wrap{
 	width:360px;
@@ -843,7 +843,7 @@
 	/* production 區塊 */
 	.product{
 		width:1080px;
-		mergin:auto;
+		margin:auto;
 		overflow:hidden;
 		padding-bottom:50px;
 	}
