@@ -776,7 +776,8 @@
 	
 	.location .wrap .location_detail .detail.show .detail_cont{
 		width:800px;
-		top:100px;
+		top:0;
+		bottom:0;
 	}
 	.location .wrap .location_detail .detail.show .detail_cont img{
 		float:left;
