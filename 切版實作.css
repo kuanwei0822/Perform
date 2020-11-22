@@ -633,6 +633,11 @@
 /* 電腦尺寸大於375px */
 @media screen and (min-width:376px){
 	
+	/* body 區塊 */
+	body{
+		background:#FFED97;
+	}
+	
 	/* head 項目 區塊 */
 	.head{
 		width:100%;
@@ -837,7 +842,8 @@
 	
 	/* production 區塊 */
 	.product{
-		min-width:1080px;
+		width:1080px;
+		mergin:auto;
 		overflow:hidden;
 		padding-bottom:50px;
 	}
