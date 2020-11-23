@@ -258,6 +258,9 @@
 	position:relative;
 	box-shadow:0 0 5px #642100;
 }
+.location .wrap .location_item img{
+	height:300px;
+}
 .location .wrap .location_item .item .comment{
 	display:block;
 	width:300px;
