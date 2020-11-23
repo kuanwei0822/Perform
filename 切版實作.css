@@ -301,9 +301,11 @@
 .location .wrap .location_detail .detail.show .detail_cont{
 	position:absolute;
 	width:300px;
-	top:150px;
+	height:500px;
+	top:0;
 	right:0;
 	left:0;
+	bottom:0;
 	margin:auto;
 	font-family: 'Noto Sans TC', sans-serif;
 	color:#fff;
