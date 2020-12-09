@@ -1,0 +1,54 @@
+.header img{
+	width:100%;
+	vertical-align:bottom;
+}
+.wrap .item_group{
+	width:100%;
+	max-width:1000px;
+	margin: 0 auto;
+}
+.item img{
+	padding:2% 2%;
+	width:96%;
+	vertical-align:bottom;
+}
+.item h3{
+	padding:10px 0;
+	font-size:25px;
+	text-align:center;
+}
+.item p{
+	padding:0px 2% 2% 2%;
+	font-size:20px;
+}
+.title{
+	height:30px;
+	padding:20px 0;
+	margin:0 0 5px 0;
+	background-color:#FFFFAA;
+	font-size:30px;
+	text-align:center;
+}
+.footer{
+	width:100%;
+	padding:20px 0;
+	background-color:#000000;
+	font-size:15px;
+	color:#ffffff;
+	text-align:center;
+}
+
+@media screen and (min-width:415px){
+	.item_group{
+		display:flex;
+	}
+	.item_group .item{
+		width:100%;
+	}
+	.more .more_item2{
+		display:flex;
+		flex-direction:column;
+		justify-content:center;
+	}
+	
+}
