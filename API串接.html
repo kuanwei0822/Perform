@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>ExchangeRate</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- CSS reset -->
+		<link rel="stylesheet" href="https://meyerweb.com/eric/tools/css/reset/reset200802.css">
+		<!-- 字型連結	font-family: 'Noto Sans TC', sans-serif; -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300&display=swap">
+		<!-- CSS 樣式-->
+		<link rel="stylesheet" href="ExchangeRate.css">
+		<!-- jQuery CDN-->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<!-- JS 檔案-->
+		<script src="ExchangeRate.js"></script>
+	</head>
+	<body>
+		<div class="dataInput">
+			<div class="wrap">
+				<div class="topic">
+					<h3>取得政府資料開放平台的匯率資料</h3>
+					<p>利用AJAX對政府開放資料平台提出請求，並取得JSON公開資料。<br>
+					資料出處:&nbsp<a href="https://data.gov.tw/ " target="_blank">政府資料開放平台</a></p>
+				</div>
+				<div class="selection">
+					<div class="selection_head">
+						<h3>選擇匯率幣別和時間並送出</h3>
+					</div>
+					<div class="selection_input">
+						<div class="nation">
+							<select name="nation" id="nation">
+								<option value="0">--選擇匯率幣別--</option>
+								<option value="1">新台幣</option>
+								<option value="2">人民幣</option>
+								<option value="3">日圓</option>
+								<option value="4">韓元</option>
+								<option value="5">新加坡元</option>
+								<option value="6">歐元</option>
+								<option value="7">英鎊</option>
+								<option value="8">澳幣</option>
+							</select>
+						</div>
+						<div class="bytime">
+							<select name="bytime" id="bytime">
+								<option value="0">--選擇時間--</option>
+								<option value="1">每月</option>
+								<option value="2">每年</option>
+							</select>
+						</div>
+						<div class="sendout">
+							<button id="btn_sendout">送出</button>
+							<button id="btn_reset">Reset</button>
+						</div>
+					</div>
+				</div>
+				<div class="dataTable">
+					<p>尚無載入資料</p>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
